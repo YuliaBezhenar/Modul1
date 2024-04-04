@@ -1,0 +1,67 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>My Form</ion-card-title>
+    <ion-card-subtitle
+      >Розробити сервіс для обчислення кількості пар однакових сусідніх
+      елементів у двовимірному масиві. В якості сусідніх можуть виступати як
+      елементи, що знаходяться в одному стовпчику так і елементи, що знаходяться
+      в одному рядку. <br />Форма для введення повинна спочатку запитати
+      розмірність масиву, після чого сформувати відповідну кількість полів
+      введення. Максимальна розмірність – 10 на 10.</ion-card-subtitle
+    >
+  </ion-card-header>
+
+  <ion-card-content>
+    <form [formGroup]="matrixForm" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="floating">Довжина</ion-label>
+        <ion-input
+          formControlName="matrixLength"
+          type="number"
+          (change)="
+            setMatrixValues(
+              matrixForm.value.matrixLength,
+              matrixForm.value.matrixHeight
+            )
+          "
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Висота</ion-label>
+        <ion-input
+          formControlName="matrixHeight"
+          type="number"
+          (change)="
+            setMatrixValues(
+              matrixForm.value.matrixLength,
+              matrixForm.value.matrixHeight
+            )
+          "
+        ></ion-input>
+      </ion-item>
+
+      <div formArrayName="matrixValues">
+        <ion-row
+          *ngFor="let row of getControls(); let i = index"
+          [formGroupName]="i"
+        >
+          <ion-col *ngFor="let control of getRowControls(i); let j = index">
+            <ion-item>
+              <ion-input formControlName="{{ j }}" type="number"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <ion-button
+        type="submit"
+        fill="outline"
+        shape="round"
+        expand="block"
+        [disabled]="!matrixForm.valid"
+        >Submit</ion-button
+      >
+    </form>
+  </ion-card-content>
+  <app-view-pairs [matrix]="matrix"></app-view-pairs>
+</ion-card>
